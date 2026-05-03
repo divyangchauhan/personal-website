@@ -22,25 +22,28 @@ I was the founding engineer on Assure and later led the project as Team Lead, ev
 a cross-functional team of 9. I contributed ~70% of the production codebase and owned
 architecture decisions, infrastructure, DevOps, and delivery end to end.
 
-### From v1 to v2
+### Assure v1 — OutSystems (built from scratch, 3 months)
 
-Assure started as an OutSystems application contracted to a third-party development studio with
-a 6-month timeline. The delivered code was buggy and non-functional. I stepped in with a small
-team, took ownership of the codebase, and rebuilt it from scratch in 3 months — authoring ~50%
-of the codebase with most of the critical logic. I also obtained the OutSystems Associate
-Reactive Developer certification during this period.
+A third-party studio was contracted to build Assure with a 6-month timeline. Their delivery was
+buggy, non-functional, and unusable. I was brought in to take over. Rather than salvage the
+existing code, I built the platform from scratch in OutSystems — authoring ~50% of the codebase
+and writing most of the critical logic, with the rest contributed by a small team under my
+direction. We shipped in 3 months. I also obtained the OutSystems Associate Reactive Developer
+certification during this period.
 
-As the product scaled, OutSystems hit hard architectural limits: no runtime white-labeling,
-no support for three-level tenancy, and no way to isolate tenant data at the storage level.
-That triggered Assure v2 — a full rewrite in TypeScript on a serverless AWS architecture,
-designed from the ground up to remove every ceiling v1 had hit.
+### Assure v2 — TypeScript / Serverless AWS (full rewrite)
+
+As the product scaled, OutSystems hit hard architectural ceilings I couldn't engineer around:
+no runtime white-labeling, no support for three-level tenancy, and no way to isolate tenant
+data at the storage level. I designed and led the full rewrite in TypeScript on a serverless
+AWS architecture — built from the ground up to remove every constraint v1 had hit.
 
 v2 also introduced **data residency controls**: supertenants and tenants can choose the country
-where their data is stored, and select their storage isolation level — shared table, separate
-table, or separate database — all while a single shared codebase and unified API endpoints serve
-every tenancy tier without compromise.
+where their data is stored and select a storage isolation level — shared table, separate table,
+or separate database — all while a single unified codebase and shared API endpoints serve every
+tenancy tier without compromise.
 
-### What I built
+### What I built in v2
 
 **ETL Pipeline**
 Assure ingests raw security scan data from an internal scanning engine, which publishes a Kafka
@@ -100,9 +103,16 @@ platform were never compromised.
 
 ### Tech stack
 
+**v1**
+
 | Layer | Technologies |
 |---|---|
-| v1 | OutSystems |
+| Platform | OutSystems |
+
+**v2**
+
+| Layer | Technologies |
+|---|---|
 | Backend | NestJS, AWS Lambda, MongoDB, CASL.js |
 | Frontend | Angular, AWS CloudFront, CloudFront Functions (customer portal + backoffice) |
 | Auth | AWS Cognito with custom second-factor authentication via Lambda triggers |
