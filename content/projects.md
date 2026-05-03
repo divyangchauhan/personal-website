@@ -4,7 +4,7 @@
 
 ## NST Cyber Assure
 
-**Founding Engineer & Team Lead · NST Cyber · Mar 2021 – Jan 2024**
+**Founding Engineer & Team Lead · NST Cyber · Mar 2021 – Feb 2024**
 
 ### What it is
 
@@ -50,6 +50,7 @@ Assure ingests raw security scan data from an internal scanning engine, which pu
 event carrying the ZIP file location and metadata — which project and tenant it belongs to —
 triggering an AWS Lambda ETL pipeline. I designed and built the pipeline to
 parse, normalize, and populate several datasets:
+
 - Web application and infrastructure vulnerability datasets
 - Exploit intelligence — existing exploits mapped to discovered vulnerabilities
 - Typosquatted domain dataset for phishing simulation
@@ -105,25 +106,25 @@ platform were never compromised.
 
 **v1**
 
-| Layer | Technologies |
-|---|---|
-| Platform | OutSystems |
+| Layer    | Technologies |
+| -------- | ------------ |
+| Platform | OutSystems   |
 
 **v2**
 
-| Layer | Technologies |
-|---|---|
-| Backend | NestJS, AWS Lambda, MongoDB, CASL.js |
-| Frontend | Angular, AWS CloudFront, CloudFront Functions (customer portal + backoffice) |
-| Auth | AWS Cognito with custom second-factor authentication via Lambda triggers |
-| ETL | AWS Lambda pipeline, Apache Kafka |
-| Infrastructure | AWS (Lambda, ECS, S3, CloudFront, Cognito), Terraform |
-| Testing | Cypress (E2E) |
+| Layer          | Technologies                                                                 |
+| -------------- | ---------------------------------------------------------------------------- |
+| Backend        | NestJS, AWS Lambda, MongoDB, CASL.js                                         |
+| Frontend       | Angular, AWS CloudFront, CloudFront Functions (customer portal + backoffice) |
+| Auth           | AWS Cognito with custom second-factor authentication via Lambda triggers     |
+| ETL            | AWS Lambda pipeline, Apache Kafka                                            |
+| Infrastructure | AWS (Lambda, ECS, S3, CloudFront, Cognito), Terraform                        |
+| Testing        | Cypress (E2E)                                                                |
 
 ### Screenshots
 
 <!-- Download screenshots from nstcyber.ai and save to /assets/screenshots/assure-*.png -->
+
 - [ ] Dashboard view
 - [ ] Vulnerability dataset view
 - [ ] Threat exposure overview
-

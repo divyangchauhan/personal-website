@@ -14,7 +14,7 @@ those.
 
 **Currently building:** ResumeForge, an AI-powered resume intelligence tool that helps job
 seekers tailor their resume for specific roles — and an AI penetration tester that automates security reconnaissance, discovers vulnerabilities,
-and reviews code for open source targets.
+and reviews code.
 
 I'm actively looking for a software engineering role at a product-focused startup — as an
 individual contributor or engineering lead — somewhere the technical problems are still being
