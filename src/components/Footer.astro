@@ -3,8 +3,39 @@
 ---
 
 <footer>
-  <!-- Footer skeleton -->
+  <div class="footer-inner">
+    <hr class="divider" />
+    <p class="footer-text">
+      <span>© 2026 Divyang Chauhan</span>
+      <span>divyangchauhan.com</span>
+    </p>
+  </div>
 </footer>
 
 <style>
+  footer {
+    max-width: var(--col-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--side-pad);
+    padding-right: var(--side-pad);
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  .footer-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
 </style>
