@@ -1,0 +1,40 @@
+/* Google Fonts — Fraunces (display), Source Serif 4 (body), JetBrains Mono (UI) */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ─── Design tokens ─── */
+:root {
+  --bg:         #111010;
+  --bg-subtle:  #191817;
+  --bg-card:    #1c1a18;
+  --border:     #2a2724;
+  --text:       #e8e2d9;
+  --text-muted: #9e9690;
+  --accent:     #f0833a;
+  --accent-dim: rgba(240, 131, 58, .12);
+  --display:    'Fraunces', serif;
+  --serif:      'Source Serif 4', serif;
+  --mono:       'JetBrains Mono', monospace;
+  --col-width:  680px;
+  --side-pad:   clamp(1.5rem, 5vw, 3rem);
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Base typography ─── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: clamp(16px, 1.1vw, 18px);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
