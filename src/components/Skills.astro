@@ -1,10 +1,109 @@
 ---
 // Skills — category rows with tag pills
+const categories = [
+  {
+    label: 'Languages',
+    tags: ['TypeScript', 'JavaScript', 'Python', 'SQL', 'OutSystems'],
+  },
+  {
+    label: 'Frameworks & Libraries',
+    tags: ['NestJS', 'Django', 'Django REST Framework', 'Express', 'Angular', 'React', 'Next.js', 'GraphQL', 'CASL.js', 'TypeORM'],
+  },
+  {
+    label: 'Databases',
+    tags: ['PostgreSQL', 'MongoDB', 'MySQL'],
+  },
+  {
+    label: 'Infrastructure & Cloud',
+    tags: ['AWS', 'Docker', 'Terraform'],
+  },
+  {
+    label: 'Tools & Practices',
+    tags: ['Git', 'CI/CD', 'Apache Kafka', 'Celery', 'Microservices', 'REST APIs', 'Event-Driven Architecture', 'Cypress'],
+  },
+  {
+    label: 'Web3',
+    tags: ['Ethers.js', 'Viem', 'The Graph', 'Multi-chain Integration'],
+  },
+];
 ---
 
 <section id="skills">
-  <!-- Skills skeleton -->
+  <p class="section-label">03 / Skills</p>
+
+  <div class="skill-list">
+    {categories.map((cat) => (
+      <div class="skill-row">
+        <p class="cat-label">{cat.label}</p>
+        <ul class="tag-list">
+          {cat.tags.map((tag) => (
+            <li class="tag">{tag}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
 </section>
 
 <style>
+  #skills {
+    padding-top: clamp(4rem, 8vw, 6rem);
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+
+  .skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .skill-row {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .cat-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-top: 0.2rem;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.25em 0.65em;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 520px) {
+    .skill-row {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
 </style>
