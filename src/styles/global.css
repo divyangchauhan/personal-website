@@ -48,3 +48,7 @@ main {
   padding-left: var(--side-pad);
   padding-right: var(--side-pad);
 }
+
+main > section:not(#hero) {
+  border-top: 1px solid var(--border);
+}
