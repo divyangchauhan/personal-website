@@ -1,17 +1,17 @@
 ---
 // Hero — name, tagline, description, CTAs
-const name = "Divyang Chauhan";
-const tagline = "Backend engineer specializing in distributed systems, scalable APIs, and getting things shipped.";
-const descriptionHtml = `I build the backend systems that keep products running — <strong>event-driven architectures</strong>, <strong>serverless infrastructure</strong>, and APIs that hold up under real workloads. Currently shipping blockchain infrastructure; on the side I'm building <strong>ResumeForge</strong>, a resume intelligence tool because job hunting deserved better tooling. I'm looking for my next role at a startup where the engineering problems are still being figured out.`;
+import { frontmatter, compiledContent } from '../../content/hero.md';
+const { name, tagline, ctaPrimary, ctaSecondary } = frontmatter;
+const descriptionHtml = compiledContent();
 ---
 
 <section id="hero">
   <h1 class="name">{name}</h1>
   <p class="tagline">{tagline}</p>
-  <p class="description" set:html={descriptionHtml} />
+  <div class="description" set:html={descriptionHtml} />
   <div class="ctas">
-    <a href="#projects" class="btn-primary">View Projects</a>
-    <a href="#contact" class="btn-secondary">Get in Touch →</a>
+    <a href={ctaPrimary.href} class="btn-primary">{ctaPrimary.label}</a>
+    <a href={ctaSecondary.href} class="btn-secondary">{ctaSecondary.label}</a>
   </div>
 </section>
 
@@ -52,7 +52,7 @@ const descriptionHtml = `I build the backend systems that keep products running 
     margin-bottom: 2.75rem;
   }
 
-  .description strong {
+  .description :global(strong) {
     font-weight: 600;
     text-decoration: underline;
     text-decoration-color: var(--text-muted);

@@ -1,37 +1,24 @@
 ---
 // About — section label, three body paragraphs, currently-building callout
+import { frontmatter, Content } from '../../content/about.md';
+const { calloutLabel, calloutItems } = frontmatter;
 ---
 
 <section id="about">
   <p class="section-label">01 / About</p>
 
-  <p class="body-text">
-    I'm a backend engineer with five years of experience building distributed systems, scalable APIs,
-    and SaaS products from the ground up. My work has ranged from serverless infrastructure at a
-    cybersecurity startup — cutting infrastructure costs by $200K/year and reducing system downtime
-    by 90% — to blockchain event pipelines at Kleros, where I re-architected a monolith into
-    horizontally scalable services.
-  </p>
-
-  <p class="body-text">
-    Outside of my day job, I'm genuinely excited about AI — not just as a buzzword but as a
-    practical lever. I use AI tools heavily in my own workflow, I'm constantly turning over ideas
-    for where AI can make real products more useful, and that curiosity feeds directly into the SaaS
-    products I'm building on the side. ResumeForge, a resume intelligence tool, is the first of those.
-  </p>
-
-  <p class="body-text">
-    I'm actively looking for a software engineering role at a product-focused startup — as an
-    individual contributor or engineering lead — somewhere the technical problems are still being
-    defined and good engineering decisions actually move the needle.
-  </p>
+  <div class="prose">
+    <Content />
+  </div>
 
   <div class="callout">
-    <p class="callout-label">Currently building</p>
+    <p class="callout-label">{calloutLabel}</p>
     <p class="callout-prose">
-      <code>ResumeForge</code>, an AI-powered resume intelligence tool that helps job seekers tailor
-      their resume for specific roles · <code>AI Penetration Tester</code> automates
-      security reconnaissance, discovers vulnerabilities, and reviews code.
+      {calloutItems.map((item: { name: string; description: string }, i: number) => (
+        <>
+          <code>{item.name}</code>{`, ${item.description}`}{i < calloutItems.length - 1 ? ' · ' : ''}
+        </>
+      ))}
     </p>
   </div>
 </section>
@@ -51,7 +38,7 @@
     margin-bottom: 1.5rem;
   }
 
-  .body-text {
+  .prose :global(p) {
     font-family: var(--serif);
     font-optical-sizing: auto;
     font-size: clamp(0.95rem, 1.4vw, 1.05rem);

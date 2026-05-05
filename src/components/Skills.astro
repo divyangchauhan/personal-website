@@ -1,42 +1,18 @@
 ---
 // Skills — category rows with tag pills
-const categories = [
-  {
-    label: 'Languages',
-    tags: ['TypeScript', 'JavaScript', 'Python', 'SQL', 'OutSystems'],
-  },
-  {
-    label: 'Frameworks & Libraries',
-    tags: ['NestJS', 'Django', 'Django REST Framework', 'Express', 'Angular', 'React', 'Next.js', 'GraphQL', 'CASL.js', 'TypeORM'],
-  },
-  {
-    label: 'Databases',
-    tags: ['PostgreSQL', 'MongoDB', 'MySQL'],
-  },
-  {
-    label: 'Infrastructure & Cloud',
-    tags: ['AWS', 'Docker', 'Terraform'],
-  },
-  {
-    label: 'Tools & Practices',
-    tags: ['Git', 'CI/CD', 'Apache Kafka', 'Celery', 'Microservices', 'REST APIs', 'Event-Driven Architecture', 'Cypress'],
-  },
-  {
-    label: 'Web3',
-    tags: ['Ethers.js', 'Viem', 'The Graph', 'Multi-chain Integration'],
-  },
-];
+import { frontmatter } from '../../content/skills.md';
+const { categories } = frontmatter;
 ---
 
 <section id="skills">
   <p class="section-label">03 / Skills</p>
 
   <div class="skill-list">
-    {categories.map((cat) => (
+    {categories.map((cat: { label: string; tags: string[] }) => (
       <div class="skill-row">
         <p class="cat-label">{cat.label}</p>
         <ul class="tag-list">
-          {cat.tags.map((tag) => (
+          {cat.tags.map((tag: string) => (
             <li class="tag">{tag}</li>
           ))}
         </ul>
