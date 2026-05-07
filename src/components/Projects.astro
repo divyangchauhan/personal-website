@@ -1,0 +1,40 @@
+---
+import ProjectCard from './ProjectCard.astro';
+
+const projectModules = import.meta.glob('../../content/projects/*.md');
+const projects = (
+  await Promise.all(Object.values(projectModules).map((loader) => (loader as () => Promise<any>)()))
+).sort((a, b) => a.frontmatter.order - b.frontmatter.order);
+---
+
+<section id="projects">
+  <p class="section-label">02 / Projects</p>
+
+  <div class="project-list">
+    {projects.map((project) => (
+      <ProjectCard project={project} />
+    ))}
+  </div>
+</section>
+
+<style>
+  #projects {
+    padding-top: clamp(4rem, 8vw, 6rem);
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.75rem;
+  }
+
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+</style>
