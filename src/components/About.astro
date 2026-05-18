@@ -16,7 +16,7 @@ const { calloutLabel, calloutItems } = frontmatter;
     <p class="callout-prose">
       {calloutItems.map((item: { name: string; description: string }, i: number) => (
         <>
-          <code>{item.name}</code>{`, ${item.description}`}{i < calloutItems.length - 1 ? ' · ' : ''}
+          <code>{item.name}</code>{` — ${item.description}`}{i < calloutItems.length - 1 ? ' · ' : ''}
         </>
       ))}
     </p>
@@ -41,10 +41,10 @@ const { calloutLabel, calloutItems } = frontmatter;
   .prose :global(p) {
     font-family: var(--serif);
     font-optical-sizing: auto;
-    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
-    line-height: 1.75;
+    font-size: 1.05rem;
+    line-height: 1.8;
     color: var(--text);
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.95rem;
   }
 
   .callout {
@@ -71,13 +71,16 @@ const { calloutLabel, calloutItems } = frontmatter;
     color: var(--text);
   }
 
+  /* Product names: inline-code feel — recessed (darker than the
+     var(--bg-subtle) callout surface), tight, no border/chip. Still
+     mono + bold so the names read as distinct from the prose. */
   .callout-prose code {
     font-family: var(--mono);
-    font-size: 0.82em;
-    background: var(--bg-card);
+    font-size: 1.02em;
+    font-weight: 600;
+    background: var(--bg);
     color: var(--text);
-    padding: 0.15em 0.4em;
-    border-radius: 3px;
-    border: 1px solid var(--border);
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
   }
 </style>

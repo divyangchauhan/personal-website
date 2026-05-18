@@ -39,6 +39,7 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   padding-top: 52px;
+  overflow-x: hidden;
 }
 
 main {
@@ -49,6 +50,19 @@ main {
   padding-right: var(--side-pad);
 }
 
+/* Section dividers span the full viewport width, not the 680px column.
+   Pseudo-element breaks out of the constrained <main> container. */
 main > section:not(#hero) {
-  border-top: 1px solid var(--border);
+  position: relative;
+}
+
+main > section:not(#hero)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1px;
+  background: var(--border);
 }

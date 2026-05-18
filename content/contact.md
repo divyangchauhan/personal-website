@@ -12,16 +12,16 @@ rows:
     href: "https://github.com/divyangchauhan"
     external: true
     download: false
-    arrow: "→"
+    arrow: "↗"
   - service: LinkedIn
     display: divyangchauhan
     href: "https://linkedin.com/in/divyangchauhan"
     external: true
     download: false
-    arrow: "→"
+    arrow: "↗"
   - service: Resume
     display: Download PDF
-    href: "/assets/Divyang Chauhan Software Engineer.pdf"
+    href: "/assets/divyang-chauhan-resume.pdf"
     external: false
     download: true
     arrow: "↓"

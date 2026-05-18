@@ -83,19 +83,28 @@ const descriptionHtml = compiledContent();
     background: #ff9a56;
   }
 
+  /* Faint-bordered button with an underline beneath the text.
+     Base sits muted; hover brightens text + border + underline together
+     (matching how body text links brighten). */
   .btn-secondary {
     display: inline-block;
     font-family: var(--mono);
     font-size: 0.85rem;
-    color: var(--text);
-    text-decoration: none;
-    border-bottom: 1px solid var(--text);
-    padding-bottom: 2px;
-    transition: color 175ms ease-out, border-color 175ms ease-out;
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.55rem 1.1rem;
+    transition: color 175ms ease-out, border-color 175ms ease-out,
+                text-decoration-color 175ms ease-out;
   }
 
   .btn-secondary:hover {
-    color: var(--text-muted);
+    color: var(--text);
     border-color: var(--text-muted);
+    text-decoration-color: var(--text-muted);
   }
 </style>

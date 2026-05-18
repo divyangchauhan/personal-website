@@ -57,11 +57,13 @@ const hasToggle = isFull && toggleHtml.length > 0;
   {isFull ? (
     <div class="card-header">
       {frontmatter.status && <span class="status-badge">{frontmatter.status}</span>}
-      <div class="name-role-row">
+      <div class="name-meta-row">
         <h3 class="card-name">{frontmatter.name}</h3>
-        <span class="card-role">{frontmatter.role}</span>
+        <div class="role-period">
+          <span class="card-role">{frontmatter.role}</span>
+          <span class="card-period">{frontmatter.period}</span>
+        </div>
       </div>
-      <p class="card-period">{frontmatter.period}</p>
     </div>
   ) : (
     <div class="card-header">
@@ -154,12 +156,29 @@ const hasToggle = isFull && toggleHtml.length > 0;
 </article>
 
 <style>
-  /* ── Card wrapper ── */
-  .project-card {
+  /* ── Card wrapper ──
+     Only the full case study (NST Cyber Assure) gets the bordered
+     card surface. Compact side projects render as flat content
+     blocks separated by whitespace alone, so the case study reads
+     as the primary work and the rest as supporting context. */
+  .project-card--full {
     background: var(--bg-card);
-    border: 1px solid color-mix(in srgb, var(--border) 70%, var(--text-muted) 30%);
+    border: 1px solid var(--border);
     border-radius: 4px;
-    padding: 2rem;
+    padding: 2rem 2.25rem;
+    transition: border-color 200ms ease-out, background-color 200ms ease-out;
+  }
+
+  /* Subtle interactivity cue — brightened border + slightly warmer
+     surface. No transform/movement. Full card only. */
+  .project-card--full:hover {
+    border-color: #3a3530;
+    background-color: #1e1c1a;
+  }
+
+  /* Flat block — no surface, flush to the column. */
+  .project-card--compact {
+    padding: 0.5rem 0;
   }
 
   /* ── Status badge ── */
@@ -176,20 +195,37 @@ const hasToggle = isFull && toggleHtml.length > 0;
     margin-bottom: 0.85rem;
   }
 
-  /* ── Full card header ── */
-  .name-role-row {
+  /* ── Full card header ──
+     Name on the left; role + period stacked together on the right so
+     the period stays anchored to the role tag, not floating on its
+     own full-width line. */
+  .name-meta-row {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.5rem 1.5rem;
     flex-wrap: wrap;
-    margin-bottom: 0.3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .role-period {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    text-align: right;
+    flex-shrink: 0;
   }
 
   .card-name {
     font-family: var(--display);
     font-size: clamp(1.4rem, 2.5vw, 1.75rem);
     font-weight: 300;
+    /* Pin a low optical size so Fraunces uses its text/editorial
+       proportions instead of the high-contrast display cut auto
+       optical sizing applies at this size. */
+    font-optical-sizing: none;
+    font-variation-settings: 'opsz' 14;
     color: var(--text);
     line-height: 1.15;
   }
@@ -200,8 +236,6 @@ const hasToggle = isFull && toggleHtml.length > 0;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--accent);
-    white-space: nowrap;
-    flex-shrink: 0;
   }
 
   .card-period {
@@ -209,7 +243,6 @@ const hasToggle = isFull && toggleHtml.length > 0;
     font-size: 0.73rem;
     letter-spacing: 0.02em;
     color: var(--text-muted);
-    margin-bottom: 1.25rem;
   }
 
   /* ── Compact card header ── */
@@ -245,27 +278,28 @@ const hasToggle = isFull && toggleHtml.length > 0;
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    background: var(--bg);
+    /* Slightly lighter & warmer than the card surface for contrast. */
+    background: color-mix(in srgb, var(--bg-card) 92%, var(--text) 8%);
     border: 1px solid var(--border);
     border-radius: 3px;
-    padding: 0.9rem 0.85rem;
+    padding: 0.85rem 1rem;
   }
 
   .metric-value {
     font-family: var(--display);
-    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
-    font-weight: 300;
+    font-size: 1.6rem;
+    font-weight: 700;
     color: var(--accent);
     line-height: 1;
   }
 
   .metric-label {
     font-family: var(--mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.03em;
+    font-size: 0.64rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text-muted);
-    line-height: 1.35;
+    line-height: 1.4;
   }
 
   /* ── Toggle button ── */
@@ -489,8 +523,8 @@ const hasToggle = isFull && toggleHtml.length > 0;
 
   /* ── Responsive ── */
   @media (max-width: 600px) {
-    .project-card {
-      padding: 1.25rem;
+    .project-card--full {
+      padding: 1.5rem;
     }
 
     .metrics-grid {
@@ -501,10 +535,15 @@ const hasToggle = isFull && toggleHtml.length > 0;
       width: 5.5rem;
     }
 
-    .name-role-row {
+    .name-meta-row {
       flex-direction: column;
       gap: 0.4rem;
       align-items: flex-start;
+    }
+
+    .role-period {
+      align-items: flex-start;
+      text-align: left;
     }
   }
 </style>
