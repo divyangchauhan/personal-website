@@ -1,0 +1,87 @@
+---
+// Skills — category rows with tag pills
+import { frontmatter } from '../../content/skills.md';
+const { categories } = frontmatter;
+---
+
+<section id="skills">
+  <p class="section-label">03 / Skills</p>
+
+  <div class="skill-list">
+    {categories.map((cat: { label: string; tags: string[] }) => (
+      <div class="skill-row">
+        <p class="cat-label">{cat.label}</p>
+        <ul class="tag-list">
+          {cat.tags.map((tag: string) => (
+            <li class="tag">{tag}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  #skills {
+    padding-top: clamp(4rem, 8vw, 6rem);
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+
+  .skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .skill-row {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .cat-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-top: 0.2rem;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.5rem;
+    list-style: none;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text);
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.2rem 0.55rem;
+    letter-spacing: 0.02em;
+    line-height: 1.8;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 520px) {
+    .skill-row {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,549 @@
+---
+interface Link {
+  label: string;
+  url?: string;
+  note?: string;
+  external?: boolean;
+}
+
+interface Metric {
+  value: string;
+  label: string;
+}
+
+interface TechRow {
+  layer: string;
+  technologies: string;
+}
+
+interface ProjectFrontmatter {
+  name: string;
+  slug: string;
+  order: number;
+  type: 'full' | 'compact';
+  status: string | null;
+  role: string;
+  company: string;
+  period: string;
+  metrics?: Metric[];
+  techStack?: TechRow[];
+  securityRecord?: string | null;
+  techPills?: string[];
+  links: Link[];
+}
+
+interface Props {
+  project: {
+    frontmatter: ProjectFrontmatter;
+    compiledContent: () => string | Promise<string>;
+  };
+}
+
+const { project } = Astro.props;
+const { frontmatter } = project;
+const compiled = await project.compiledContent();
+
+const h2Idx = compiled.indexOf('<h2');
+const descriptionHtml = h2Idx === -1 ? compiled : compiled.slice(0, h2Idx);
+const toggleHtml = h2Idx === -1 ? '' : compiled.slice(h2Idx);
+
+const isFull = frontmatter.type === 'full';
+const hasToggle = isFull && toggleHtml.length > 0;
+---
+
+<article class:list={['project-card', isFull ? 'project-card--full' : 'project-card--compact']}>
+
+  {/* ── Full card header: name + role on same row, period below ── */}
+  {isFull ? (
+    <div class="card-header">
+      {frontmatter.status && <span class="status-badge">{frontmatter.status}</span>}
+      <div class="name-meta-row">
+        <h3 class="card-name">{frontmatter.name}</h3>
+        <div class="role-period">
+          <span class="card-role">{frontmatter.role}</span>
+          <span class="card-period">{frontmatter.period}</span>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div class="card-header">
+      {frontmatter.status && <span class="status-badge">{frontmatter.status}</span>}
+      <h3 class="card-name">{frontmatter.name}</h3>
+      <p class="card-meta-compact">{frontmatter.role} · {frontmatter.company} · {frontmatter.period}</p>
+    </div>
+  )}
+
+  {/* ── Description ── */}
+  <div class="card-description" set:html={descriptionHtml} />
+
+  {/* ── Metrics grid (full only) ── */}
+  {isFull && frontmatter.metrics && frontmatter.metrics.length > 0 && (
+    <div class="metrics-grid">
+      {frontmatter.metrics.map((m) => (
+        <div class="metric">
+          <span class="metric-value">{m.value}</span>
+          <span class="metric-label">{m.label}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {/* ── Technical detail toggle (full only) ── */}
+  {hasToggle && (
+    <details class="toggle">
+      <summary>Technical detail</summary>
+      <div class="toggle-inner">
+        <div class="toggle-body" set:html={toggleHtml} />
+
+        {frontmatter.techStack && frontmatter.techStack.length > 0 && (
+          <div class="tech-stack-block">
+            <p class="subsection-label">Tech stack</p>
+            <table class="tech-table">
+              <tbody>
+                {frontmatter.techStack.map((row) => (
+                  <tr>
+                    <td class="tech-layer">{row.layer}</td>
+                    <td class="tech-tech">{row.technologies}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {frontmatter.securityRecord && (
+          <div class="security-callout">
+            <p>
+              <span class="security-label">Security record:</span>
+              {frontmatter.securityRecord}
+            </p>
+          </div>
+        )}
+      </div>
+    </details>
+  )}
+
+  {/* ── Tech pills (compact only) ── */}
+  {!isFull && frontmatter.techPills && frontmatter.techPills.length > 0 && (
+    <ul class="tech-pills">
+      {frontmatter.techPills.map((pill) => (
+        <li class="tech-pill">{pill}</li>
+      ))}
+    </ul>
+  )}
+
+  {/* ── Links / coming soon ── */}
+  {frontmatter.links.length > 0 ? (
+    <div class="card-links">
+      {frontmatter.links.map((link) =>
+        link.url ? (
+          <a
+            href={link.url}
+            class="card-link"
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener noreferrer' : undefined}
+          >
+            {link.label} ↗
+          </a>
+        ) : link.note ? (
+          <span class="card-link-note">{link.label}: {link.note}</span>
+        ) : null
+      )}
+    </div>
+  ) : frontmatter.status === 'BUILDING' ? (
+    <p class="coming-soon">Link coming soon</p>
+  ) : null}
+</article>
+
+<style>
+  /* ── Card wrapper ──
+     Only the full case study (NST Cyber Assure) gets the bordered
+     card surface. Compact side projects render as flat content
+     blocks separated by whitespace alone, so the case study reads
+     as the primary work and the rest as supporting context. */
+  .project-card--full {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem 2.25rem;
+    transition: border-color 200ms ease-out, background-color 200ms ease-out;
+  }
+
+  /* Subtle interactivity cue — brightened border + slightly warmer
+     surface. No transform/movement. Full card only. */
+  .project-card--full:hover {
+    border-color: #3a3530;
+    background-color: #1e1c1a;
+  }
+
+  /* Flat block — no surface, flush to the column. */
+  .project-card--compact {
+    padding: 0.5rem 0;
+  }
+
+  /* ── Status badge ── */
+  .status-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    border-radius: 3px;
+    padding: 0.2em 0.65em;
+    margin-bottom: 0.85rem;
+  }
+
+  /* ── Full card header ──
+     Name on the left; role + period stacked together on the right so
+     the period stays anchored to the role tag, not floating on its
+     own full-width line. */
+  .name-meta-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .role-period {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .card-name {
+    font-family: var(--display);
+    font-size: clamp(1.4rem, 2.5vw, 1.75rem);
+    font-weight: 300;
+    /* Pin a low optical size so Fraunces uses its text/editorial
+       proportions instead of the high-contrast display cut auto
+       optical sizing applies at this size. */
+    font-optical-sizing: none;
+    font-variation-settings: 'opsz' 14;
+    color: var(--text);
+    line-height: 1.15;
+  }
+
+  .card-role {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .card-period {
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+  }
+
+  /* ── Compact card header ── */
+  .card-meta-compact {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ── Description ── */
+  .card-description :global(p) {
+    font-family: var(--serif);
+    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+    line-height: 1.75;
+    color: var(--text-body);
+  }
+
+  /* ── Metrics grid ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    /* Slightly lighter & warmer than the card surface for contrast. */
+    background: color-mix(in srgb, var(--bg-card) 92%, var(--text) 8%);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.85rem 1rem;
+  }
+
+  .metric-value {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* ── Toggle button ── */
+  .toggle {
+    margin-top: 1.75rem;
+  }
+
+  .toggle > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .toggle > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .toggle > summary::after {
+    content: '↓';
+    font-size: 0.85em;
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+
+  .toggle[open] > summary::after {
+    transform: rotate(180deg);
+  }
+
+  .toggle > summary:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+
+  .toggle-inner {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  /* ── Toggle body markdown sections ── */
+  .toggle-body :global(h2) {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.85rem;
+    margin-top: 1.5rem;
+  }
+
+  .toggle-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .toggle-body :global(p) {
+    font-family: var(--serif);
+    font-size: clamp(0.9rem, 1.3vw, 1rem);
+    line-height: 1.72;
+    color: var(--text-body);
+    margin-bottom: 0.75rem;
+  }
+
+  .toggle-body :global(ul) {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .toggle-body :global(li) {
+    font-family: var(--serif);
+    font-size: clamp(0.9rem, 1.3vw, 1rem);
+    line-height: 1.65;
+    color: var(--text-body);
+    padding-left: 1.25rem;
+    position: relative;
+  }
+
+  .toggle-body :global(li::before) {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.85em;
+    top: 0.1em;
+  }
+
+  .toggle-body :global(strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ── Tech stack table ── */
+  .subsection-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .tech-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .tech-table td {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .tech-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .tech-layer {
+    color: var(--text-muted);
+    width: 8rem;
+    padding-right: 1.25rem;
+    white-space: nowrap;
+  }
+
+  .tech-tech {
+    color: var(--text);
+  }
+
+  /* ── Security record callout ── */
+  .security-callout {
+    border-left: 2px solid var(--accent);
+    padding: 0.8rem 1.25rem;
+    background: var(--accent-dim);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .security-callout p {
+    font-family: var(--serif);
+    font-size: clamp(0.9rem, 1.3vw, 1rem);
+    line-height: 1.7;
+    color: var(--text-body);
+  }
+
+  .security-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    margin-right: 0.4em;
+  }
+
+  /* ── Compact: tech pills ── */
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin-top: 1.25rem;
+  }
+
+  .tech-pill {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.25em 0.65em;
+    white-space: nowrap;
+  }
+
+  /* ── Links ── */
+  .card-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin-top: 1.75rem;
+  }
+
+  .card-link {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  .card-link:hover {
+    border-color: var(--accent);
+  }
+
+  .card-link-note {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .coming-soon {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 1.25rem;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .project-card--full {
+      padding: 1.5rem;
+    }
+
+    .metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tech-layer {
+      width: 5.5rem;
+    }
+
+    .name-meta-row {
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: flex-start;
+    }
+
+    .role-period {
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+</style>

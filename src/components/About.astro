@@ -1,0 +1,86 @@
+---
+// About — section label, three body paragraphs, currently-building callout
+import { frontmatter, Content } from '../../content/about.md';
+const { calloutLabel, calloutItems } = frontmatter;
+---
+
+<section id="about">
+  <p class="section-label">01 / About</p>
+
+  <div class="prose">
+    <Content />
+  </div>
+
+  <div class="callout">
+    <p class="callout-label">{calloutLabel}</p>
+    <p class="callout-prose">
+      {calloutItems.map((item: { name: string; description: string }, i: number) => (
+        <>
+          <code>{item.name}</code>{` — ${item.description}`}{i < calloutItems.length - 1 ? ' · ' : ''}
+        </>
+      ))}
+    </p>
+  </div>
+</section>
+
+<style>
+  #about {
+    padding-top: clamp(4rem, 8vw, 6rem);
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .prose :global(p) {
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 0.95rem;
+  }
+
+  .callout {
+    margin-top: 2rem;
+    border-left: 2px solid var(--accent);
+    padding: 0.9rem 1.25rem;
+    background: var(--bg-subtle);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .callout-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.55rem;
+  }
+
+  .callout-prose {
+    font-family: var(--serif);
+    font-size: clamp(0.9rem, 1.3vw, 1rem);
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  /* Product names: inline-code feel — recessed (darker than the
+     var(--bg-subtle) callout surface), tight, no border/chip. Still
+     mono + bold so the names read as distinct from the prose. */
+  .callout-prose code {
+    font-family: var(--mono);
+    font-size: 1.02em;
+    font-weight: 600;
+    background: var(--bg);
+    color: var(--text);
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+  }
+</style>

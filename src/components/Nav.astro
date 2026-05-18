@@ -1,0 +1,118 @@
+---
+// Nav — fixed frosted-glass top bar, logo + section links
+---
+
+<nav aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="#hero" class="logo" aria-label="Divyang Chauhan — home">DC</a>
+    <ul class="links" role="list">
+      <li><a href="#about">about</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<style>
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    z-index: 100;
+    background: rgba(17, 16, 16, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(42, 39, 36, 0.6);
+  }
+
+  .nav-inner {
+    max-width: var(--col-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--side-pad);
+    padding-right: var(--side-pad);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    outline-offset: 4px;
+    border-radius: 2px;
+    transition: color 175ms ease-out;
+  }
+
+  .logo:hover {
+    color: var(--accent);
+  }
+
+  .logo:focus-visible {
+    outline: 2px solid var(--accent);
+  }
+
+  .links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  .links a {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    position: relative;
+    padding-bottom: 2px;
+    outline-offset: 4px;
+    border-radius: 2px;
+    transition: color 175ms ease-out;
+  }
+
+  /* animated underline — grows left to right */
+  .links a::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 175ms ease-out;
+  }
+
+  .links a:hover,
+  .links a:focus-visible {
+    color: var(--accent);
+  }
+
+  .links a:hover::after,
+  .links a:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .links a:focus-visible {
+    outline: 2px solid var(--accent);
+  }
+
+  /* mobile: hide links, keep logo */
+  @media (max-width: 639px) {
+    .links {
+      display: none;
+    }
+  }
+</style>
